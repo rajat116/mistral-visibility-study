@@ -81,7 +81,6 @@ def _share_of_voice(text: str) -> tuple[float, int, int]:
 
 def _recommendation_rate(text: str) -> tuple[float, Optional[str]]:
     """Returns (1.0, brand_slug) if brand is top recommendation, else (0.0, other_model)."""
-    brand_pat = _build_brand_pattern()
     brand_slug = config.brand_slug
 
     top_rec_patterns = [

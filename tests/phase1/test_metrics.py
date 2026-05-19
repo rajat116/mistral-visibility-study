@@ -1,9 +1,7 @@
 """Unit tests for the metrics extractor."""
-import pytest
 from src.common.models import QueryRecord
 from src.phase1.metrics.extractor import (
     compute_metrics,
-    _mistral_mentions,
     _prominence_score,
     _sentiment_score,
     _share_of_voice,

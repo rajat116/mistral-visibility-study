@@ -4,7 +4,6 @@ Brand is configured via BRAND_NAME in .env.
 """
 from __future__ import annotations
 
-import io
 import json
 from datetime import datetime
 from pathlib import Path
@@ -12,7 +11,6 @@ from pathlib import Path
 import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
-from plotly.subplots import make_subplots
 import streamlit as st
 
 from src.common.config import config as _cfg
