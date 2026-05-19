@@ -6,7 +6,7 @@
 [![Streamlit](https://img.shields.io/badge/Streamlit-Dashboard-FF4B4B?style=flat&logo=streamlit&logoColor=white)](https://streamlit.io)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
-> **Portfolio project targeting [Peec AI](https://peec.ai)** — A production-grade, two-phase AI Search Visibility (GEO) system that measures, quantifies, and improves how Mistral AI is perceived and recommended by frontier LLMs.
+> **Portfolio project** — A production-grade, two-phase AI Search Visibility (GEO) system that measures, quantifies, and improves how Mistral AI is perceived and recommended by frontier LLMs.
 
 ---
 
@@ -177,7 +177,7 @@ streamlit run src/dashboard/app.py
 
 ## 🖥 Live Demo
 
-**[▶ Open Live Dashboard →](https://YOUR_APP.streamlit.app)**
+**[▶ Open Live Dashboard →](https://mistral-visibility-study-zhy6pz25gapa2gphryfqox.streamlit.app/)**
 
 > The live demo runs in **demo mode** showing the real results from a completed study run (no API keys needed to view). Click "Generate AI Recommendations" to see GPT-4o analyse the data live.
 
@@ -241,7 +241,7 @@ Tests cover: all 6 metric extraction functions, aggregator logic, consistency sc
 
 ## 💡 Why This Matters
 
-This project demonstrates the core product loop of **AI Search Visibility platforms** like [Peec AI](https://peec.ai):
+This project demonstrates the core product loop of **AI Search Visibility platforms**:
 
 | This Study | Real Product |
 |------------|-------------|
@@ -262,4 +262,4 @@ MIT License — see [LICENSE](LICENSE)
 
 ---
 
-<p align="center">Built by <a href="https://github.com/YOUR_USERNAME">Rajat Gupta</a> · Targeting <a href="https://peec.ai">Peec AI</a></p>
+<p align="center">Built by <a href="https://github.com/rajat116">Rajat Gupta</a>·</p>
