@@ -1,0 +1,74 @@
+name: Phase 2 — RAG-Augmented Run (Manual)
+
+on:
+  workflow_dispatch:
+    inputs:
+      baseline_run_id:
+        description: "Phase 1 run_id to compute before/after deltas against"
+        required: false
+        default: ""
+      dry_run:
+        description: "Dry run (skip GCP writes)"
+        required: false
+        default: "false"
+        type: choice
+        options: ["true", "false"]
+      regenerate_content:
+        description: "Force regenerate synthetic content"
+        required: false
+        default: "false"
+        type: choice
+        options: ["true", "false"]
+      rebuild_index:
+        description: "Force rebuild RAG index"
+        required: false
+        default: "false"
+        type: choice
+        options: ["true", "false"]
+
+jobs:
+  run-phase2:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Authenticate to GCP
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.GCP_SA_KEY }}
+
+      - name: Run Phase 2 pipeline
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
+          GCS_BUCKET_NAME: ${{ secrets.GCS_BUCKET_NAME }}
+          BQ_DATASET: ${{ secrets.BQ_DATASET }}
+        run: |
+          FLAGS=""
+          if [ "${{ github.event.inputs.dry_run }}" = "true" ]; then FLAGS="$FLAGS --dry-run"; fi
+          if [ "${{ github.event.inputs.regenerate_content }}" = "true" ]; then FLAGS="$FLAGS --regenerate-content"; fi
+          if [ "${{ github.event.inputs.rebuild_index }}" = "true" ]; then FLAGS="$FLAGS --rebuild-index"; fi
+          if [ -n "${{ github.event.inputs.baseline_run_id }}" ]; then
+            FLAGS="$FLAGS --baseline-run-id ${{ github.event.inputs.baseline_run_id }}"
+          fi
+          python scripts/run_phase2.py $FLAGS
+
+      - name: Upload synthetic content + index
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: phase2-artifacts-${{ github.run_number }}
+          path: |
+            data/synthetic_content/
+            data/results/
+          retention-days: 30

@@ -1,0 +1,77 @@
+[
+  {
+    "query_id": "q001",
+    "category": "general_selection",
+    "text": "What is the best large language model for production use in 2024?"
+  },
+  {
+    "query_id": "q002",
+    "category": "startup",
+    "text": "Which AI model should I use for my startup's core product?"
+  },
+  {
+    "query_id": "q003",
+    "category": "cost_performance",
+    "text": "What is the most cost-effective LLM for a high-volume API use case?"
+  },
+  {
+    "query_id": "q004",
+    "category": "open_source",
+    "text": "What are the best open-source large language models available right now?"
+  },
+  {
+    "query_id": "q005",
+    "category": "enterprise",
+    "text": "Which LLM providers offer the best enterprise-grade security and compliance?"
+  },
+  {
+    "query_id": "q006",
+    "category": "coding",
+    "text": "What is the best AI model for code generation and software development tasks?"
+  },
+  {
+    "query_id": "q007",
+    "category": "multilingual",
+    "text": "Which LLM handles multilingual content and non-English languages best?"
+  },
+  {
+    "query_id": "q008",
+    "category": "comparison",
+    "text": "How do GPT-4, Claude, Gemini, and Mistral compare for business applications?"
+  },
+  {
+    "query_id": "q009",
+    "category": "europe",
+    "text": "What is the best European AI model or LLM provider for GDPR-compliant deployments?"
+  },
+  {
+    "query_id": "q010",
+    "category": "fine_tuning",
+    "text": "Which LLM is easiest to fine-tune on custom domain data?"
+  },
+  {
+    "query_id": "q011",
+    "category": "rag",
+    "text": "What LLM should I use for a retrieval-augmented generation (RAG) pipeline?"
+  },
+  {
+    "query_id": "q012",
+    "category": "reasoning",
+    "text": "Which AI model performs best on complex reasoning and analytical tasks?"
+  },
+  {
+    "query_id": "q013",
+    "category": "speed",
+    "text": "What is the fastest LLM with the lowest latency for real-time applications?"
+  },
+  {
+    "query_id": "q014",
+    "category": "api_ease",
+    "text": "Which LLM API is easiest to integrate for a developer building a chatbot?"
+  },
+  {
+    "query_id": "q015",
+    "category": "general_selection",
+    "text": "What AI model should I choose if I need a balance of quality, speed, and cost?"
+  }
+]

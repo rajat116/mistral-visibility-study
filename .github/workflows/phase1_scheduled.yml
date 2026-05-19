@@ -1,0 +1,64 @@
+name: Phase 1 — Scheduled Visibility Run
+
+on:
+  schedule:
+    # Every Monday at 09:00 UTC
+    - cron: "0 9 * * 1"
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "Dry run (skip GCP writes)"
+        required: false
+        default: "false"
+        type: choice
+        options: ["true", "false"]
+      run_id:
+        description: "Custom run ID (optional)"
+        required: false
+        default: ""
+
+jobs:
+  run-phase1:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Authenticate to GCP
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.GCP_SA_KEY }}
+
+      - name: Run Phase 1 pipeline
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
+          GCS_BUCKET_NAME: ${{ secrets.GCS_BUCKET_NAME }}
+          BQ_DATASET: ${{ secrets.BQ_DATASET }}
+        run: |
+          DRY_RUN_FLAG=""
+          if [ "${{ github.event.inputs.dry_run }}" = "true" ]; then
+            DRY_RUN_FLAG="--dry-run"
+          fi
+          RUN_ID_FLAG=""
+          if [ -n "${{ github.event.inputs.run_id }}" ]; then
+            RUN_ID_FLAG="--run-id ${{ github.event.inputs.run_id }}"
+          fi
+          python scripts/run_phase1.py $DRY_RUN_FLAG $RUN_ID_FLAG
+
+      - name: Upload results artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: phase1-results-${{ github.run_number }}
+          path: data/results/
+          retention-days: 30

@@ -1,0 +1,40 @@
+# Environment
+.env
+.env.local
+
+# GCP credentials
+credentials/
+*.json
+!data/queries/*.json
+!data/synthetic_content/*.json
+!infra/**/*.json
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+*.egg-info/
+dist/
+build/
+.venv/
+venv/
+env/
+
+# Data (large files / raw outputs)
+data/results/
+data/synthetic_content/*.md
+data/synthetic_content/*.json
+
+# Keep demo data for Streamlit Cloud
+!data/demo_data.json
+
+# Docker
+*.tar
+
+# IDE
+.vscode/
+.idea/
+*.swp
