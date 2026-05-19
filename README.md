@@ -5,6 +5,7 @@
 [![GCP](https://img.shields.io/badge/GCP-BigQuery%20%2B%20GCS-4285F4?style=flat&logo=googlecloud&logoColor=white)](https://cloud.google.com)
 [![Streamlit](https://img.shields.io/badge/Streamlit-Dashboard-FF4B4B?style=flat&logo=streamlit&logoColor=white)](https://streamlit.io)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-Streamlit-FF4B4B?style=flat&logo=streamlit&logoColor=white)](https://mistral-visibility-study-zhy6pz25gapa2gphryfqox.streamlit.app/)
 
 > **Measure your brand's visibility in AI-generated answers. Understand where you're missing. Fix it. Track the results.**
 
@@ -13,6 +14,16 @@ When users ask ChatGPT, Perplexity, or Gemini *"What's the best tool for X?"* �
 This platform answers those questions with data, and proves that targeted content intervention can dramatically improve your AI search ranking.
 
 **Works for any brand in any category.** Change 6 lines in `.env` and the entire platform — queries, metrics, content, dashboard, PDF reports — adapts to your product.
+
+---
+
+## 🌐 Live Demo
+
+**[▶ Open Interactive Dashboard](https://mistral-visibility-study-zhy6pz25gapa2gphryfqox.streamlit.app/)**
+
+The demo runs a complete study on **Mistral AI** as an example brand — real metrics, real before/after deltas, AI-generated recommendations, and a downloadable PDF report.
+
+When you clone this repo and set `BRAND_NAME=YourProduct` in `.env`, the dashboard shows your brand's data instead.
 
 ---
 
@@ -27,7 +38,9 @@ This platform answers those questions with data, and proves that targeted conten
 | **Recommendation Rate** | 27% | **87%** | +60pp |
 | **Consistency Score** | 0.73 | **0.86** | +0.14 |
 
-**[▶ View Live Dashboard →](https://YOUR_APP.streamlit.app)**
+**[▶ View Live Demo Dashboard →](https://mistral-visibility-study-zhy6pz25gapa2gphryfqox.streamlit.app/)**
+> The demo shows a real study run on **Mistral AI** as an example brand.
+> When you deploy with your own brand config, the dashboard shows your data, your metrics, and AI recommendations tailored to your product.
 
 ---
 
