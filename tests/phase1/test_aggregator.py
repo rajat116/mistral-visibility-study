@@ -67,7 +67,7 @@ class TestAggregateRun:
 
     def test_delta_computation(self):
         from src.common.models import RunSummary
-        from datetime import datetime, timezone
+
 
         baseline = RunSummary(
             run_id="baseline",

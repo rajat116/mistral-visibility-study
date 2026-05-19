@@ -1,8 +1,6 @@
 """Google Cloud Storage client — stores raw JSON responses."""
 from __future__ import annotations
 
-from pathlib import Path
-
 from google.cloud import storage
 
 from src.common.config import config
