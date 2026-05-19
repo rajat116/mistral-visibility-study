@@ -224,7 +224,7 @@ def generate_ai_recommendations(p1: pd.Series, p2: pd.Series) -> str:
         return f"{float(v):.3f}" if v is not None and pd.notna(v) else "N/A"
 
     prompt = f"""You are a strategic AI Search Visibility consultant. A client has run a visibility study
-measuring how often " + BRAND + " is mentioned and recommended by frontier LLMs when users ask " + BRAND_CAT + "-selection questions.
+measuring how often {BRAND} is mentioned and recommended by frontier LLMs when users ask {BRAND_CAT}-selection questions.
 
 Here are the actual measured results:
 
@@ -245,7 +245,7 @@ PHASE 2 - AFTER RAG CONTENT INTERVENTION:
 - Consistency Score:   {fv(p2, 'avg_consistency_score')}
 
 Based on the baseline weaknesses and what the RAG intervention proved works, give 5 highly specific,
-actionable recommendations for how " + BRAND + " should improve its organic AI search visibility.
+actionable recommendations for how {BRAND} should improve its organic AI search visibility.
 
 For each recommendation:
 1. Name the specific gap it addresses (reference the actual metric number)
@@ -527,7 +527,7 @@ def generate_pdf_report(p1: pd.Series, p2: pd.Series,
 
 # ── Sidebar ─────────────────────────────────────────────────────────────────────
 with st.sidebar:
-    st.markdown("""
+    st.markdown(f"""
     <div style='text-align:center; padding: 16px 0 8px 0;'>
       <div style='font-size:2rem;'>🔍</div>
       <div style='color:#f97316;font-weight:700;font-size:1rem;letter-spacing:.05em;'>
@@ -555,10 +555,10 @@ with st.sidebar:
           </div>
         </div>
         """, unsafe_allow_html=True)
-    st.markdown("""
+    st.markdown(f"""
     <div style='color:#475569;font-size:0.72rem;line-height:1.6;'>
     <b style='color:#64748b;'>ABOUT THIS STUDY</b><br>
-    Quantifies ' + BRAND + ''s presence in LLM-generated model recommendations and demonstrates
+    Quantifies {BRAND}'s presence in LLM-generated model recommendations and demonstrates
     how strategic content intervention improves all visibility metrics.
     </div>
     """, unsafe_allow_html=True)
@@ -581,7 +581,7 @@ latest_p2 = df_p2.iloc[-1] if has_p2 else None
 # ══════════════════════════════════════════════════════════════════════════════
 if page == "🏠 Executive Summary":
 
-    st.markdown("""
+    st.markdown(f"""
     <div class='hero-banner'>
       <div class='hero-tag'>Portfolio Project · AI Search Visibility (GEO)</div>
       <h1>{BRAND} — Search Visibility Study</h1>
