@@ -1,6 +1,6 @@
 """
-Mistral AI — Search Visibility Study
-Professional client-facing Streamlit dashboard.
+AI Search Visibility Study — brand-agnostic Streamlit dashboard.
+Brand is configured via BRAND_NAME in .env.
 """
 from __future__ import annotations
 
@@ -15,9 +15,15 @@ import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 import streamlit as st
 
+from src.common.config import config as _cfg
+
+BRAND        = _cfg.brand_name        # e.g. "Mistral AI"
+BRAND_SLUG   = _cfg.brand_slug        # e.g. "mistral"
+BRAND_CAT    = _cfg.brand_category    # e.g. "large language model provider"
+
 # ── Page config ────────────────────────────────────────────────────────────────
 st.set_page_config(
-    page_title="Mistral AI · Search Visibility Study",
+    page_title=f"{BRAND} · Search Visibility Study",
     page_icon="🔍",
     layout="wide",
     initial_sidebar_state="expanded",
@@ -218,7 +224,7 @@ def generate_ai_recommendations(p1: pd.Series, p2: pd.Series) -> str:
         return f"{float(v):.3f}" if v is not None and pd.notna(v) else "N/A"
 
     prompt = f"""You are a strategic AI Search Visibility consultant. A client has run a visibility study
-measuring how often Mistral AI is mentioned and recommended by GPT-4o when users ask LLM-selection questions.
+measuring how often " + BRAND + " is mentioned and recommended by frontier LLMs when users ask " + BRAND_CAT + "-selection questions.
 
 Here are the actual measured results:
 
@@ -239,7 +245,7 @@ PHASE 2 - AFTER RAG CONTENT INTERVENTION:
 - Consistency Score:   {fv(p2, 'avg_consistency_score')}
 
 Based on the baseline weaknesses and what the RAG intervention proved works, give 5 highly specific,
-actionable recommendations for how Mistral AI should improve its organic AI search visibility.
+actionable recommendations for how " + BRAND + " should improve its organic AI search visibility.
 
 For each recommendation:
 1. Name the specific gap it addresses (reference the actual metric number)
@@ -302,7 +308,7 @@ def generate_pdf_report(p1: pd.Series, p2: pd.Series,
             self.set_font("Helvetica", "B", 13)
             self.set_text_color(226, 232, 240)
             self.set_xy(12, 6)
-            self.cell(0, 10, "MISTRAL AI - SEARCH VISIBILITY STUDY", ln=False)
+            self.cell(0, 10, _safe(f"{BRAND.upper()} - SEARCH VISIBILITY STUDY"), ln=False)
             self.set_font("Helvetica", "", 8)
             self.set_text_color(148, 163, 184)
             self.set_xy(0, 6)
@@ -314,7 +320,7 @@ def generate_pdf_report(p1: pd.Series, p2: pd.Series,
             self.set_y(-14)
             self.set_font("Helvetica", "", 8)
             self.set_text_color(100, 116, 139)
-            self.cell(0, 10, f"Mistral AI Visibility Study  |  Page {self.page_no()}", align="C")
+            self.cell(0, 10, f"{BRAND} Visibility Study  |  Page {self.page_no()}", align="C")
 
     pdf = PDF()
     pdf.set_margins(left=12, top=34, right=12)   # top=34 clears the 22px header with breathing room
@@ -330,7 +336,7 @@ def generate_pdf_report(p1: pd.Series, p2: pd.Series,
     pdf.set_x(12)
     pdf.set_font("Helvetica", "", 11)
     pdf.set_text_color(148, 163, 184)
-    pdf.cell(0, 7, "Measuring and improving Mistral AI's presence in LLM-generated recommendations", ln=True)
+    pdf.cell(0, 7, f"Measuring and improving {BRAND}'s presence in LLM-generated recommendations", ln=True)
     pdf.ln(6)
 
     def safe_cell(text, **kwargs):
@@ -359,7 +365,7 @@ def generate_pdf_report(p1: pd.Series, p2: pd.Series,
 
     section_title("Executive Summary")
     body_text(
-        "This study measured how often and how favorably Mistral AI is mentioned when frontier "
+        f"This study measured how often and how favorably {BRAND} is mentioned when frontier "
         "LLMs (GPT-4o) answer realistic questions about model selection. We then demonstrated "
         "that injecting high-quality, favorable web content via a RAG pipeline significantly "
         "improves all six visibility metrics - proving the core mechanism behind AI Search "
@@ -477,7 +483,7 @@ def generate_pdf_report(p1: pd.Series, p2: pd.Series,
         section_title("AI-Generated Strategic Recommendations")
         body_text(ai_recs)
     else:
-        section_title("Strategic Recommendations for Mistral AI")
+        section_title(f"Strategic Recommendations for {BRAND}")
         recs = [
             "Publish regular comparison content on the Mistral blog: 'Mistral vs GPT-4', "
             "'Mistral for Enterprise', 'Why European companies choose Mistral' - these are "
@@ -527,7 +533,7 @@ with st.sidebar:
       <div style='color:#f97316;font-weight:700;font-size:1rem;letter-spacing:.05em;'>
         VISIBILITY STUDY
       </div>
-      <div style='color:#64748b;font-size:0.75rem;margin-top:4px;'>Mistral AI · GEO Research</div>
+      <div style='color:#64748b;font-size:0.75rem;margin-top:4px;'>{BRAND} · GEO Research</div>
     </div>
     """, unsafe_allow_html=True)
     st.markdown("---")
@@ -552,7 +558,7 @@ with st.sidebar:
     st.markdown("""
     <div style='color:#475569;font-size:0.72rem;line-height:1.6;'>
     <b style='color:#64748b;'>ABOUT THIS STUDY</b><br>
-    Quantifies Mistral AI's presence in LLM-generated model recommendations and demonstrates
+    Quantifies ' + BRAND + ''s presence in LLM-generated model recommendations and demonstrates
     how strategic content intervention improves all visibility metrics.
     </div>
     """, unsafe_allow_html=True)
@@ -578,12 +584,12 @@ if page == "🏠 Executive Summary":
     st.markdown("""
     <div class='hero-banner'>
       <div class='hero-tag'>Portfolio Project · AI Search Visibility (GEO)</div>
-      <h1>Mistral AI — Search Visibility Study</h1>
+      <h1>{BRAND} — Search Visibility Study</h1>
       <p>
-        How often does GPT-4o recommend Mistral when users ask about LLM selection?
+        How often do frontier LLMs recommend {BRAND} when users ask about {BRAND_CAT} selection?
         We measured the baseline, intervened with targeted content, and proved a
-        <strong style='color:#f97316;'>+60% lift in recommendation rate</strong> —
-        demonstrating the core mechanism behind Generative Engine Optimization.
+        <strong style='color:#f97316;'>dramatic lift in recommendation rate</strong> —
+        demonstrating the core mechanism behind Generative Engine Optimization (GEO).
       </p>
     </div>
     """, unsafe_allow_html=True)

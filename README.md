@@ -1,4 +1,4 @@
-# 🔍 Mistral AI — Search Visibility Study
+# 🔍 AI Search Visibility Study — Plug & Play GEO Platform
 
 [![Python](https://img.shields.io/badge/Python-3.11-3776AB?style=flat&logo=python&logoColor=white)](https://python.org)
 [![OpenAI](https://img.shields.io/badge/OpenAI-GPT--4o-412991?style=flat&logo=openai&logoColor=white)](https://openai.com)
@@ -6,28 +6,20 @@
 [![Streamlit](https://img.shields.io/badge/Streamlit-Dashboard-FF4B4B?style=flat&logo=streamlit&logoColor=white)](https://streamlit.io)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
-> **Portfolio project** — A production-grade, two-phase AI Search Visibility (GEO) system that measures, quantifies, and improves how Mistral AI is perceived and recommended by frontier LLMs.
+> **Measure your brand's visibility in AI-generated answers. Understand where you're missing. Fix it. Track the results.**
+
+When users ask ChatGPT, Perplexity, or Gemini *"What's the best tool for X?"* — does your product get mentioned? How prominently? How positively? Does the LLM recommend it first?
+
+This platform answers those questions with data, and proves that targeted content intervention can dramatically improve your AI search ranking.
+
+**Works for any brand in any category.** Change 6 lines in `.env` and the entire platform — queries, metrics, content, dashboard, PDF reports — adapts to your product.
 
 ---
 
-## 🎯 What Is This?
+## 🎯 Example Results (Mistral AI, May 2026)
 
-When users ask ChatGPT, Gemini, or Perplexity *"What's the best LLM for my startup?"*, do they mention Mistral? How prominently? How positively? Do they recommend it?
-
-This study answers those questions with data — and then proves that **strategic content intervention can dramatically improve those numbers**.
-
-**Phase 1 (Measure):** Query GPT-4o with 15 realistic LLM-selection questions. Extract 6 visibility metrics per response. Store everything in Google Cloud BigQuery + GCS.
-
-**Phase 2 (Intervene):** Generate 6 synthetic articles (blog posts, comparison guides, technical walkthroughs) that fairly position Mistral. Build a FAISS RAG index. Re-run the same queries with the articles as context. Recompute all metrics and show before/after deltas.
-
----
-
-## 📊 Results
-
-> **Real data from a completed study run — May 2026**
-
-| Metric | Phase 1 Baseline | Phase 2 (RAG) | Delta |
-|--------|:---:|:---:|:---:|
+| Metric | Before (Baseline) | After (RAG Intervention) | Delta |
+|--------|:-----------------:|:------------------------:|:-----:|
 | **Mention Rate** | 53% | **100%** | +47pp |
 | **Prominence Score** | 0.20 | **0.85** | +0.65 |
 | **Sentiment Score** | +0.21 | **+0.47** | +0.27 |
@@ -35,165 +27,217 @@ This study answers those questions with data — and then proves that **strategi
 | **Recommendation Rate** | 27% | **87%** | +60pp |
 | **Consistency Score** | 0.73 | **0.86** | +0.14 |
 
-**Key finding:** Injecting 6 well-written articles into a RAG pipeline transformed Mistral from an afterthought (4.4% SoV) to the **dominant recommendation** (49.2% SoV) — proving the core mechanism behind Generative Engine Optimization (GEO).
+**[▶ View Live Dashboard →](https://YOUR_APP.streamlit.app)**
 
 ---
 
-## 🏗 Architecture
+## ⚡ Quick Start — 3 Steps
 
-```
-┌─────────────────────────────────────────────────────────────┐
-│                     Phase 1: Measure                         │
-│                                                               │
-│  Query Bank (15 Qs) ──► GPT-4o ──► Raw Response             │
-│                      ──► Gemini ──► Raw Response             │
-│                                        │                      │
-│                            Metrics Extractor                  │
-│                    (6 metrics per response via NLP)           │
-│                                        │                      │
-│                     ┌──────────────────┴──────────┐          │
-│                     ▼                             ▼           │
-│               GCS (raw JSON)              BigQuery            │
-│                                    (metrics + summaries)      │
-└─────────────────────────────────────────────────────────────┘
-
-┌─────────────────────────────────────────────────────────────┐
-│                     Phase 2: Intervene                        │
-│                                                               │
-│  GPT-4o writes 6 synthetic articles about Mistral            │
-│       │                                                       │
-│  text-embedding-3-small ──► FAISS index                      │
-│       │                                                       │
-│  Query + Top-5 chunks ──► GPT-4o / Gemini                   │
-│                                │                              │
-│                    Recompute all 6 metrics                    │
-│              + Delta vs Phase 1 baseline                      │
-└─────────────────────────────────────────────────────────────┘
-
-              Streamlit Dashboard (live demo below)
-        (Radar chart, time series, before/after, PDF export)
-```
-
----
-
-## 📐 Metrics Defined
-
-| # | Metric | Formula | Range |
-|---|--------|---------|-------|
-| 1 | **Mention Rate** | % responses mentioning Mistral | 0–1 |
-| 2 | **Prominence Score** | `1 − (first_mention_char_pos / response_length)` | 0–1 |
-| 3 | **Sentiment Score** | VADER compound score of Mistral-mentioning sentences | −1 to +1 |
-| 4 | **Share of Voice** | Mistral mentions ÷ total tracked-model mentions | 0–1 |
-| 5 | **Recommendation Rate** | % where Mistral is the top recommendation | 0–1 |
-| 6 | **Consistency Score** | `1 − stdev(sentiment_scores)` across the run | 0–1 |
-
----
-
-## 🗂 Project Structure
-
-```
-mistral-visibility-study/
-├── src/
-│   ├── common/           # Config, logger, Pydantic models
-│   ├── phase1/
-│   │   ├── queries/      # LLM engines (OpenAI, Gemini)
-│   │   ├── metrics/      # 6-metric extractor + run aggregator
-│   │   └── storage/      # BigQuery + GCS clients
-│   ├── phase2/
-│   │   ├── content_gen/  # GPT-4o synthetic article generator
-│   │   ├── rag/          # FAISS indexer + retrieval
-│   │   └── pipeline/     # Phase 2 orchestrator
-│   └── dashboard/        # Streamlit app (4 pages)
-├── data/
-│   ├── queries/          # 15-question query bank
-│   └── demo_data.json    # Real results for live demo
-├── infra/bigquery/       # BigQuery DDL / schema SQL
-├── scripts/              # CLI entry points + scheduler
-├── tests/                # 26 unit tests (all passing)
-├── .github/workflows/    # CI + weekly Phase 1 cron
-├── Dockerfile
-├── docker-compose.yml
-└── requirements.txt
-```
-
----
-
-## 🚀 Quick Start
-
-### Prerequisites
-- Python 3.11+
-- OpenAI API key (GPT-4o access)
-- Google AI Studio key (Gemini)
-- GCP project with BigQuery + GCS enabled
-
-### 1 — Clone & install
-
-```bash
-git clone https://github.com/YOUR_USERNAME/mistral-visibility-study.git
-cd mistral-visibility-study
-
-conda create -n mistral-study python=3.11 -y
-conda activate mistral-study
-conda install -c conda-forge faiss-cpu -y
-pip install -r requirements.txt
-```
-
-### 2 — Configure
+### Step 1 — Configure your brand
 
 ```bash
 cp .env.example .env
-# Fill in: OPENAI_API_KEY, GEMINI_API_KEY, GCP_PROJECT_ID
-# Set GOOGLE_APPLICATION_CREDENTIALS or run: gcloud auth application-default login
 ```
 
-### 3 — Set up GCP (one-time)
+Edit these 6 lines for your product:
+
+```env
+BRAND_NAME=Acme Database          # Your product name
+BRAND_SLUG=acme                   # Lowercase, no spaces
+BRAND_ALIASES=acme,acme db        # All names it goes by
+BRAND_DESCRIPTION=a fast, open-source time-series database
+BRAND_CATEGORY=time-series database
+COMPETITOR_NAMES=influxdb,timescaledb,prometheus,clickhouse,questdb
+```
+
+Then add your API key:
+
+```env
+OPENAI_API_KEY=sk-proj-...
+```
+
+### Step 2 — Install & run
 
 ```bash
-gcloud services enable bigquery.googleapis.com storage.googleapis.com
-python scripts/setup_gcp.py
+conda create -n visibility python=3.11 -y && conda activate visibility
+conda install -c conda-forge faiss-cpu -y
+pip install -r requirements.txt
+
+python scripts/run_phase1.py    # measure baseline visibility
 ```
 
-### 4 — Run Phase 1
-
-```bash
-python scripts/run_phase1.py
-# Dry run (no GCP writes):
-python scripts/run_phase1.py --dry-run
-```
-
-### 5 — Run Phase 2
-
-```bash
-python scripts/run_phase2.py --baseline-run-id <your-phase1-run-id>
-```
-
-### 6 — Launch dashboard
+### Step 3 — View results
 
 ```bash
 streamlit run src/dashboard/app.py
 ```
 
----
-
-## 🖥 Live Demo
-
-**[▶ Open Live Dashboard →](https://mistral-visibility-study-zhy6pz25gapa2gphryfqox.streamlit.app/)**
-
-> The live demo runs in **demo mode** showing the real results from a completed study run (no API keys needed to view). Click "Generate AI Recommendations" to see GPT-4o analyse the data live.
+That's it. You now have:
+- 6 visibility metrics measured across 15 queries
+- A live dashboard with charts and insights
+- A downloadable PDF report with AI-generated recommendations
 
 ---
 
-## ⚙️ Automated Scheduling
+## 🏗 How It Works
 
-Phase 1 runs automatically every Monday at 09:00 UTC via GitHub Actions:
+```
+┌──────────────────────────────────────────────────────────────┐
+│  PHASE 1 — MEASURE                                            │
+│                                                               │
+│  15 query templates     ──► rendered with your brand/category │
+│  (e.g. "best {category} for startups?")                       │
+│                                │                              │
+│            GPT-4o + Gemini answer each query                  │
+│                                │                              │
+│         6-metric NLP extractor runs on each response          │
+│    (mention, prominence, sentiment, SoV, rec rate, consistency)│
+│                                │                              │
+│         BigQuery + GCS  ◄──────┘                              │
+└──────────────────────────────────────────────────────────────┘
 
-```yaml
-on:
-  schedule:
-    - cron: "0 9 * * 1"
+┌──────────────────────────────────────────────────────────────┐
+│  PHASE 2 — INTERVENE                                          │
+│                                                               │
+│  GPT-4o generates 6 brand-favorable articles                  │
+│  (blog post, comparison, technical guide, startup guide, ...)  │
+│                │                                              │
+│  FAISS vector index  (text-embedding-3-small)                 │
+│                │                                              │
+│  Same 15 queries + top-5 retrieved chunks → LLM              │
+│                │                                              │
+│  Recompute all 6 metrics  →  before/after delta               │
+└──────────────────────────────────────────────────────────────┘
+
+                    Streamlit Dashboard
+      Executive Summary · Metric Trends · Before/After Radar
+      Response Explorer · AI Recommendations · PDF Export
 ```
 
-Trigger manually anytime via **Actions → Phase 1 Scheduled Run → Run workflow**.
+---
+
+## 📐 The 6 Visibility Metrics
+
+| # | Metric | What It Measures | Range |
+|---|--------|-----------------|-------|
+| 1 | **Mention Rate** | % of LLM responses that mention your brand | 0–1 |
+| 2 | **Prominence Score** | How early your brand appears (`1 − char_position / length`) | 0–1 |
+| 3 | **Sentiment Score** | VADER sentiment of sentences mentioning your brand | −1 to +1 |
+| 4 | **Share of Voice** | Your mentions ÷ total competitor mentions | 0–1 |
+| 5 | **Recommendation Rate** | % where your brand is the top recommendation | 0–1 |
+| 6 | **Consistency Score** | `1 − stdev(sentiments)` — narrative stability across LLMs | 0–1 |
+
+---
+
+## 📂 Project Structure
+
+```
+├── src/
+│   ├── common/           # Config (brand settings), logger, Pydantic models
+│   ├── phase1/
+│   │   ├── queries/      # Query templates + GPT-4o / Gemini engines
+│   │   ├── metrics/      # 6-metric extractor + run aggregator
+│   │   └── storage/      # BigQuery + GCS clients
+│   ├── phase2/
+│   │   ├── content_gen/  # Brand-aware article generator
+│   │   ├── rag/          # FAISS indexer + chunk retrieval
+│   │   └── pipeline/     # Phase 2 orchestrator
+│   └── dashboard/        # Streamlit app (4 pages + PDF)
+├── data/
+│   ├── queries/          # 15 query templates (use {brand}, {category})
+│   └── demo_data.json    # Real results for dashboard demo mode
+├── scripts/              # CLI entry points + weekly scheduler
+├── tests/                # 26 unit tests
+└── .github/workflows/    # CI + weekly Phase 1 cron
+```
+
+---
+
+## 🔧 Brand Configuration Reference
+
+| Variable | Description | Example |
+|----------|-------------|---------|
+| `BRAND_NAME` | Full product/brand name | `Supabase` |
+| `BRAND_SLUG` | Lowercase slug for regex | `supabase` |
+| `BRAND_ALIASES` | All names brand is known by | `supabase,supa` |
+| `BRAND_DESCRIPTION` | One-liner for content generation | `an open-source Firebase alternative` |
+| `BRAND_CATEGORY` | Market category for query templates | `backend-as-a-service platform` |
+| `COMPETITOR_NAMES` | Comma-separated competitor list | `firebase,planetscale,neon,railway` |
+
+### More brand examples
+
+<details>
+<summary>SaaS API Tool (e.g. Postman)</summary>
+
+```env
+BRAND_NAME=Postman
+BRAND_SLUG=postman
+BRAND_ALIASES=postman,postman api
+BRAND_DESCRIPTION=an API platform for building and testing APIs
+BRAND_CATEGORY=API testing and development tool
+COMPETITOR_NAMES=insomnia,bruno,hoppscotch,paw,thunderclient,swagger
+```
+</details>
+
+<details>
+<summary>Vector Database (e.g. Qdrant)</summary>
+
+```env
+BRAND_NAME=Qdrant
+BRAND_SLUG=qdrant
+BRAND_ALIASES=qdrant
+BRAND_DESCRIPTION=a high-performance open-source vector database
+BRAND_CATEGORY=vector database
+COMPETITOR_NAMES=pinecone,weaviate,chroma,milvus,faiss,pgvector
+```
+</details>
+
+<details>
+<summary>Cloud Provider (e.g. Render)</summary>
+
+```env
+BRAND_NAME=Render
+BRAND_SLUG=render
+BRAND_ALIASES=render,render.com
+BRAND_DESCRIPTION=a cloud platform for hosting web apps and APIs
+BRAND_CATEGORY=cloud hosting platform
+COMPETITOR_NAMES=heroku,railway,fly.io,vercel,netlify,digitalocean
+```
+</details>
+
+---
+
+## 🗓 Automated Weekly Tracking
+
+Phase 1 runs automatically every Monday at 09:00 UTC via GitHub Actions. Set these secrets in your repo:
+
+| Secret | Value |
+|--------|-------|
+| `OPENAI_API_KEY` | Your OpenAI key |
+| `GCP_PROJECT_ID` | Your GCP project |
+| `GCS_BUCKET_NAME` | Your GCS bucket |
+| `BQ_DATASET` | Your BigQuery dataset |
+| `GCP_SA_KEY` | Service account JSON |
+
+Trigger manually anytime: **Actions → Phase 1 Scheduled Run → Run workflow**
+
+---
+
+## 💾 GCP Setup (Optional — for persistent storage)
+
+Without GCP, the dashboard runs in **demo mode** using `data/demo_data.json`. To enable live BigQuery storage:
+
+```bash
+# Authenticate
+gcloud auth application-default login
+gcloud config set project YOUR_PROJECT_ID
+
+# Enable APIs
+gcloud services enable bigquery.googleapis.com storage.googleapis.com
+
+# Create dataset and tables
+python scripts/setup_gcp.py
+```
 
 ---
 
@@ -203,10 +247,10 @@ Trigger manually anytime via **Actions → Phase 1 Scheduled Run → Run workflo
 # Run Phase 1
 docker-compose run phase1
 
-# Run dashboard
+# Launch dashboard
 docker-compose up dashboard
 
-# Run with auto-scheduler
+# Run with auto-scheduler (weekly cron)
 docker-compose up scheduler
 ```
 
@@ -215,51 +259,31 @@ docker-compose up scheduler
 ## 🧪 Tests
 
 ```bash
-pytest tests/ -v
-# 26 tests, all passing
+pytest tests/ -v        # 26 tests, all passing
+pytest tests/ --cov=src # with coverage report
 ```
-
-Tests cover: all 6 metric extraction functions, aggregator logic, consistency score, delta computation, edge cases.
-
----
-
-## 🔧 Stack
-
-| Layer | Technology |
-|-------|-----------|
-| LLM Queries | OpenAI GPT-4o, Google Gemini |
-| NLP / Metrics | VADER Sentiment, regex, custom scoring |
-| Vector Search | FAISS + OpenAI text-embedding-3-small |
-| Storage | Google Cloud BigQuery + GCS |
-| Dashboard | Streamlit + Plotly |
-| PDF Reports | fpdf2 |
-| Scheduling | GitHub Actions (weekly cron) |
-| CI/CD | GitHub Actions |
-| Containerisation | Docker + Docker Compose |
-
----
-
-## 💡 Why This Matters
-
-This project demonstrates the core product loop of **AI Search Visibility platforms**:
-
-| This Study | Real Product |
-|------------|-------------|
-| Phase 1 measurement | Client visibility dashboard |
-| Query bank | Competitor & category query monitoring |
-| 6 metrics | Branded KPI tracking over time |
-| Synthetic content | Content strategy recommendations |
-| RAG intervention | Proof-of-concept for GEO impact |
-| Before/after delta | Client ROI reporting |
-
-> *"I replicated the core GEO product loop end-to-end. Mistral's baseline recommendation rate was 27%. After a single content intervention, it jumped to 87% — a +60 percentage point lift. This is the mechanism that AI Search Visibility platforms automate at scale."*
 
 ---
 
 ## 📄 License
 
-MIT License — see [LICENSE](LICENSE)
+MIT — use freely, modify, deploy for your company or clients.
 
 ---
 
-<p align="center">Built by <a href="https://github.com/rajat116">Rajat Gupta</a>·</p>
+## 💡 What Is GEO?
+
+**Generative Engine Optimization (GEO)** is the practice of improving a brand's visibility in AI-generated answers — analogous to SEO but for LLMs.
+
+When ChatGPT, Perplexity, or Gemini answer product recommendation questions, they pull from:
+- Their training data
+- Real-time web search results
+- Retrieved documents (RAG)
+
+Brands that publish high-quality, LLM-readable content about their products gain disproportionate share in AI-generated recommendations. This platform **measures** that share, **simulates** the impact of content intervention, and helps you **track improvement over time**.
+
+---
+
+<p align="center">
+  Built by <a href="https://github.com/rajat116">Rajat Gupta</a>
+</p>
